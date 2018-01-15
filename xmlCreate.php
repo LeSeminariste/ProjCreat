@@ -71,23 +71,26 @@ function createXMLfile($markerArray){
 
      $name     = $dom->createElement('name', $markerName); 
 
-     $marker->appendChild($name); 
+     //$marker->appendChild($name); 
 
      $address   = $dom->createElement('address', $markerAddress); 
 
-     $marker->appendChild($address); 
+     //$marker->appendChild($address); 
 
      $lat    = $dom->createElement('lat', $markerlat); 
 
-     $marker->appendChild($lat); 
+     //$marker->appendChild($lat); 
 
      $lng     = $dom->createElement('lng', $markerlng); 
 
-     $marker->appendChild($lng); 
+     //$marker->appendChild($lng); 
      
      $type = $dom->createElement('type', $markertype); 
 
-     $marker->appendChild($type);
+     //$marker->appendChild($type);
+	 
+	 //$marker->appendChild("\n");
+	 echo $name;
  
      $root->appendChild($marker);
 
@@ -95,6 +98,6 @@ function createXMLfile($markerArray){
 
    $dom->appendChild($root); 
 
-   $dom->save($filePath); 
+   //$dom->save($filePath); 
 
  } 

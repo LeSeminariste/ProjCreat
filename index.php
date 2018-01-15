@@ -39,8 +39,9 @@
         var infoWindow = new google.maps.InfoWindow;
 
           // Change this depending on the name of your PHP or XML file
-          downloadUrl('test.xml', function(data) {
+          downloadUrl('markers.xml', function(data) {
             var xml = data.responseXML;
+			console.log(markers);
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
               var name = markerElem.getAttribute('name');
@@ -99,8 +100,11 @@
   </body>
   
 <?php 
-	include("xmlCreate.php"); 
+	//include("xmlCreate.php"); 
+	//https://developers.google.com/maps/documentation/javascript/mysql-to-maps?hl=fr#vrifier-que-le-fichier-xml-de-sortie-fonctionne
 ?>
 
 </html>
+
+//
 	
