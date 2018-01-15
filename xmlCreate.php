@@ -45,7 +45,7 @@ $mysqli->close();
 
 function createXMLfile($markerArray){
   
-   $filePath = 'marker.xml';
+   $filePath = 'markers.xml';
 
    $dom     = new DOMDocument('1.0', 'utf-8'); 
 
