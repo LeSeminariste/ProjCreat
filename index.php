@@ -1,5 +1,6 @@
 <!DOCTYPE html >
   <head>
+    <meta name="description" content="DébarraVite, plateforme collaborative, met en relation des particuliers afin de faciliter le recyclage d'encombrants.">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>DebarraVite</title>
@@ -16,19 +17,24 @@
         padding: 0;
       }
     </style>
+	
+	<?php 
+		include("xmlCreate.php"); 
+	?>
+	
   </head>
 
   <body>
 	<a href="ajout.php">
-					<i class="fa fa-bed nav_icon"></i>
-					<span class="nav_label">Je dépose mon annonce</span>
+		<i class="fa fa-bed nav_icon"></i>
+		<span class="nav_label">Je dépose mon annonce</span>
 	</a>
     <div id="map"></div>
 
     <script>
       var customLabel = {
-        restaurant: {
-          label: 'R'
+        Déchèterie: {
+          label: 'D'
         },
         bar: {
           label: 'B'
@@ -107,13 +113,5 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA5eSkmcNDH8nw7wGcgNSF83GdN2d9PMU&libraries=places&callback=initMap">
     </script>
   </body>
-  
-<?php 
-	include("xmlCreate.php"); 
-	//https://developers.google.com/maps/documentation/javascript/mysql-to-maps?hl=fr#vrifier-que-le-fichier-xml-de-sortie-fonctionne
-?>
-
 </html>
-
-//
 	

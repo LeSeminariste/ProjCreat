@@ -17,12 +17,11 @@ if ($result = $connexion->query($query)) {
   
     if(count($markerArray)){
 
-         createXMLfile($markerArray);
+        createXMLfile($markerArray);
 
      }
 	 else {
-
-		unlink('markers.xml');
+		file_put_contents('markers.xml', '');
 	 
 	 }
 
