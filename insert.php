@@ -26,8 +26,25 @@ if(mysqli_query($connexion, $sql)){
 }
 mysqli_close($connexion);
 
-header('Location: index.php');
-exit();
-//print_r($_REQUEST);
+$url = 'index.php';
+
+//header('Location: https://debarravite.000webhostapp.com/index.php');
+//exit();
+
+if (!headers_sent())
+    {    
+        header('Location: '.$url);
+        exit;
+        }
+    else
+        {  
+        echo '<script type="text/javascript">';
+        echo 'window.location.href="'.$url.'";';
+        echo '</script>';
+        echo '<noscript>';
+        echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+        echo '</noscript>'; exit;
+    }
+
 
 ?>
