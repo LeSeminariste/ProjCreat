@@ -2,7 +2,7 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>Using MySQL and PHP with Google Maps</title>
+    <title>DebarraVite</title>
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -19,6 +19,10 @@
   </head>
 
   <body>
+	<a href="ajout.php">
+					<i class="fa fa-bed nav_icon"></i>
+					<span class="nav_label">Je dépose mon annonce</span>
+	</a>
     <div id="map"></div>
 
     <script>
@@ -54,6 +58,11 @@
               var infowincontent = document.createElement('div');
               var strong = document.createElement('strong');
               strong.textContent = name
+              infowincontent.appendChild(strong);
+              infowincontent.appendChild(document.createElement('br'));
+			  
+			  var strong = document.createElement('strong');
+              strong.textContent = type
               infowincontent.appendChild(strong);
               infowincontent.appendChild(document.createElement('br'));
 
@@ -95,12 +104,12 @@
       function doNothing() {}
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA5eSkmcNDH8nw7wGcgNSF83GdN2d9PMU&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA5eSkmcNDH8nw7wGcgNSF83GdN2d9PMU&libraries=places&callback=initMap">
     </script>
   </body>
   
 <?php 
-	//include("xmlCreate.php"); 
+	include("xmlCreate.php"); 
 	//https://developers.google.com/maps/documentation/javascript/mysql-to-maps?hl=fr#vrifier-que-le-fichier-xml-de-sortie-fonctionne
 ?>
 

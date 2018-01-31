@@ -1,33 +1,18 @@
 <?php
-$username="root";
-$password="";
-$database="test";
-?>
 
-
-<?php
-
-/** create XML file */ 
-$mysqli = new mysqli("localhost", "root", "", "test");
-
-/* check connection */
-if ($mysqli->connect_errno) {
-
-   echo "Connect failed ".$mysqli->connect_error;
-
-   exit();
-}
+include('connect.php');
 
 $query = "SELECT id, name, address, lat, lng, type FROM markers";
 
 $markerArray = array();
 
-if ($result = $mysqli->query($query)) {
+if ($result = $connexion->query($query)) {
 
     /* fetch associative array */
     while ($row = $result->fetch_assoc()) {
 
        array_push($markerArray, $row);
+	   //print_r($row);
     }
   
     if(count($markerArray)){
@@ -35,13 +20,18 @@ if ($result = $mysqli->query($query)) {
          createXMLfile($markerArray);
 
      }
+	 else {
+
+		unlink('markers.xml');
+	 
+	 }
 
     /* free result set */
     $result->free();
 }
 
 /* close connection */
-$mysqli->close();
+$connexion->close();
 
 function createXMLfile($markerArray){
   
@@ -68,36 +58,18 @@ function createXMLfile($markerArray){
      $marker = $dom->createElement('marker');
 
      $marker->setAttribute('id', $markerId);
-
-     $name     = $dom->createElement('name', $markerName); 
-
-     //$marker->appendChild($name); 
-
-     $address   = $dom->createElement('address', $markerAddress); 
-
-     //$marker->appendChild($address); 
-
-     $lat    = $dom->createElement('lat', $markerlat); 
-
-     //$marker->appendChild($lat); 
-
-     $lng     = $dom->createElement('lng', $markerlng); 
-
-     //$marker->appendChild($lng); 
-     
-     $type = $dom->createElement('type', $markertype); 
-
-     //$marker->appendChild($type);
+	 $marker->setAttribute('name', $markerName);
+	 $marker->setAttribute('address', $markerAddress);
+	 $marker->setAttribute('lat', $markerlat);
+	 $marker->setAttribute('lng', $markerlng);
+	 $marker->setAttribute('type', $markertype);
 	 
-	 //$marker->appendChild("\n");
-	 echo $name;
- 
      $root->appendChild($marker);
 
    }
 
    $dom->appendChild($root); 
 
-   //$dom->save($filePath); 
+   $dom->save($filePath); 
 
  } 
