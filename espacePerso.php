@@ -27,7 +27,6 @@
   body {
       font: 20px Montserrat, sans-serif;
       line-height: 1.8;
-      color: #f5f6f7;
   }
   p {font-size: 16px;}
   .margin {margin-bottom: 45px;}
@@ -132,6 +131,7 @@
         padding: 0;
       }
 
+
   </style>
   
   <?php 
@@ -140,7 +140,9 @@
 	
 	<?php 
 		$name = $_SESSION['name']; 
-		$firstname = $_SESSION['firstname']; 
+		$firstname = $_SESSION['firstname'];
+		$owner = $_SESSION['id'];
+		//print_r($_SESSION);
 	?>
 
 </head>
@@ -166,25 +168,42 @@
 		<form action="logout.php" method="GET" class="PH" >
 			<input type="submit" value="Deconnexion" class="button_connexion" type="button">
 		</form>
-		<form action="ajout.php">
-			<input type="submit" value="Ajout d'une annonce" class="button_inscription" type="submit">
-		</form>
+		<input onclick="openbox('Ajout', 1)" value="Ajout d'une annonce" class="button_inscription" type="button">
       </ul>
     </div>
   </div>
 </nav>
+
+<div id="shadowing"></div>
+	<div id="box">
+		<span id="boxtitle"></span>	
+		<?php
+			include("ajout.php");
+		?>
+	</div>
+</div>
 
 <!-- Body -->
 
 <div id="map"></div>
 
     <script>
+	
+	function initialize() {
+   initMap();
+   initAutoComplete();
+}
+	
       var customLabel = {
-        restaurant: {
-          label: 'R'
+        Dechetterie: {
+          icon: 'icons/dechetterie.png'
         },
-        bar: {
-          label: 'B'
+        Vegetaux: {
+          icon: 'icons/vert.png'
+        }
+		,
+        Encombrant: {
+          icon: 'icons/encombrant.png'
         }
       };
 
@@ -201,6 +220,10 @@
             var markers = xml.documentElement.getElementsByTagName('marker');
             Array.prototype.forEach.call(markers, function(markerElem) {
               var name = markerElem.getAttribute('name');
+			  var ownername = markerElem.getAttribute('ownername');
+			  var ownerfirstname = markerElem.getAttribute('ownerfirstname');
+			  var ownerage = markerElem.getAttribute('ownerage');
+			  var ownerphone = markerElem.getAttribute('ownerphone');
               var address = markerElem.getAttribute('address');
               var type = markerElem.getAttribute('type');
               var point = new google.maps.LatLng(
@@ -214,13 +237,39 @@
               infowincontent.appendChild(document.createElement('br'));
 
               var text = document.createElement('text');
-              text.textContent = address
+			  text.textContent = address
               infowincontent.appendChild(text);
-              var icon = customLabel[type] || {};
+			  
+			  infowincontent.appendChild(document.createElement('br'));
+			  
+			  var text = document.createElement('text');
+              text.textContent = ownername
+              infowincontent.appendChild(text);
+			  
+			  var text = document.createElement('text');
+			  text.textContent = ' '
+              text.textContent += ownerfirstname
+              infowincontent.appendChild(text);
+			  
+			  infowincontent.appendChild(document.createElement('br'));
+			  
+			  var text = document.createElement('text');
+              text.textContent = ownerage
+			  text.textContent += ' ans'
+              infowincontent.appendChild(text);
+			  
+			  infowincontent.appendChild(document.createElement('br'));
+			  
+			  var text = document.createElement('text');
+			  text.textContent = 'Téléphone: '
+              text.textContent += ownerphone
+              infowincontent.appendChild(text);
+  
+              var list = customLabel[type] || {};
               var marker = new google.maps.Marker({
                 map: map,
                 position: point,
-                label: icon.label
+                icon: list.icon
               });
               marker.addListener('click', function() {
                 infoWindow.setContent(infowincontent);
@@ -247,12 +296,74 @@
         request.open('GET', url, true);
         request.send(null);
       }
+	  
+		var placeSearch, autocomplete;
+		var componentForm = {
+			street_number: 'short_name',
+			route: 'long_name',
+			locality: 'long_name',
+			administrative_area_level_1: 'short_name',
+			country: 'long_name',
+			postal_code: 'short_name'
+};
+
+function initAutoComplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+    /** @type {!HTMLInputElement} */
+    (document.getElementById('autocomplete')), {
+      types: ['geocode']
+    });
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+  if (place.geometry.viewport) {
+    map.fitBounds(place.geometry.viewport);
+  } else {
+    map.setCenter(place.geometry.location);
+    map.setZoom(17); // Why 17? Because it looks good.
+  }
+  if (!marker) {
+    marker = new google.maps.Marker({
+      map: map,
+      anchorPoint: new google.maps.Point(0, -29)
+    });
+  } else marker.setMap(null);
+  marker.setOptions({
+    position: place.geometry.location,
+    map: map
+  });
+
+  for (var component in componentForm) {
+    document.getElementById(component).value = '';
+    document.getElementById(component).disabled = false;
+  }
+
+  // Get each component of the address from the place details
+  // and fill the corresponding field on the form.
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (componentForm[addressType]) {
+      var val = place.address_components[i][componentForm[addressType]];
+      document.getElementById(addressType).value = val;
+    }
+  }
+}
 
       function doNothing() {}
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA5eSkmcNDH8nw7wGcgNSF83GdN2d9PMU&callback=initMap">
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA5eSkmcNDH8nw7wGcgNSF83GdN2d9PMU&libraries=places&callback=initialize" defer>
     </script>
+	
+	
 
 
 

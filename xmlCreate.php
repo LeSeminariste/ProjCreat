@@ -2,7 +2,7 @@
 
 include('connect.php');
 
-$query = "SELECT id, name, address, lat, lng, type FROM markers";
+$query = "SELECT * FROM markers";
 
 $markerArray = array();
 
@@ -43,16 +43,16 @@ function createXMLfile($markerArray){
    for($i=0; $i<count($markerArray); $i++){
      
      $markerId        =  $markerArray[$i]['id'];  
-
      $markerName      =  $markerArray[$i]['name']; 
-
      $markerAddress    =  $markerArray[$i]['address']; 
-
      $markerlat     =  $markerArray[$i]['lat']; 
-
      $markerlng      =  $markerArray[$i]['lng']; 
-
-     $markertype  =  $markerArray[$i]['type'];	
+     $markertype  =  $markerArray[$i]['type'];
+	 $markerownername  =  $markerArray[$i]['ownername'];	 
+	 $markerownerfirstname  =  $markerArray[$i]['ownerfirstname'];
+	 $markerownerphone  =  $markerArray[$i]['ownerphone'];
+	 $markerownermail  =  $markerArray[$i]['ownermail'];
+	 $markerownerage  =  $markerArray[$i]['ownerage'];
 
      $marker = $dom->createElement('marker');
 
@@ -62,6 +62,11 @@ function createXMLfile($markerArray){
 	 $marker->setAttribute('lat', $markerlat);
 	 $marker->setAttribute('lng', $markerlng);
 	 $marker->setAttribute('type', $markertype);
+	 $marker->setAttribute('ownername', $markerownername);
+	 $marker->setAttribute('ownerfirstname', $markerownerfirstname);
+	 $marker->setAttribute('ownerphone', $markerownerphone);
+	 $marker->setAttribute('ownermail', $markerownermail);
+	 $marker->setAttribute('ownerage', $markerownerage);
 	 
      $root->appendChild($marker);
 

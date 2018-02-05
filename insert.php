@@ -9,6 +9,13 @@ include('connect.php');
 $name = mysqli_real_escape_string($connexion, $_REQUEST['name']);
 $address = mysqli_real_escape_string($connexion, $_REQUEST['address']);
 $type = mysqli_real_escape_string($connexion, $_REQUEST['type']);
+$owner = $_SESSION['id'];
+$ownername = $_SESSION['name'];
+$ownerfirstname = $_SESSION['firstname'];
+$ownerphone = $_SESSION['phone'];
+$ownermail = $_SESSION['mail'];
+$ownerage = $_SESSION['age'];
+//echo "<script>alert('toto');</script>";
 
 //echo $address;
 
@@ -18,7 +25,7 @@ $addressLink = str_replace(' ', '+', $address);
 
 include('addressConvert.php');
 
-$sql = "INSERT INTO markers (id, name, address, lat, lng, type) VALUES (NULL, '$name', '$address', '$lat', '$lng', '$type')";
+$sql = "INSERT INTO markers (id, name, address, owner, ownername, ownerfirstname, ownerphone, ownermail, ownerage, lat, lng, type) VALUES (NULL, '$name', '$address', '$owner', '$ownername', '$ownerfirstname', '$ownerphone', '$ownermail', '$ownerage', '$lat', '$lng', '$type')";
 if(mysqli_query($connexion, $sql)){
 
     echo "Records added successfully.";

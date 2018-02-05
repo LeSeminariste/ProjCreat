@@ -137,7 +137,7 @@
 			$pass=htmlspecialchars($_POST['password2']);
 			
 			include('connect.php');
-			$req = $bdd->prepare('SELECT id, name, firstname, password, age, phone FROM users WHERE email= ?');
+			$req = $bdd->prepare('SELECT id, name, firstname, password, age, phone, email FROM users WHERE email= ?');
 			
 			$req->bindValue(1,$email,PDO::PARAM_STR);
 			$check=$req->execute();
@@ -146,11 +146,12 @@
 				if($donnee = $req->fetch()){
 					if($pass === $donnee['password']){
 						$_SESSION['email']=$email;
-						$_SESSION['token']=$donnee['id'];
+						$_SESSION['id']=$donnee['id'];
 						$_SESSION['name']=$donnee['name'];
 						$_SESSION['firstname']=$donnee['firstname'];
 						$_SESSION['age']=$donnee['age'];
 						$_SESSION['phone']=$donnee['phone'];
+						$_SESSION['mail']=$donnee['email'];
 						echo "<script>alert('Conenxion reussie.')</script><br>";
 						echo "<meta http-equiv='refresh' content='0; URL=espacePerso.php'>";
 						
@@ -207,7 +208,7 @@
 <div class="container-fluid bg-1 text-center">
   <h3 class="margin">Bienvenue sur DébarraVite</h3>
   <h3>La plateforme collaborative qui met en relation des particuliers afin de faciliter le recyclage d'encombrants. </h3>
-  <iframe width="860" height="480" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
+  <iframe width="860" height="480" src="https://www.youtube.com/watch?v=XXezrXF40Ks&rel=0"></iframe>
   <br>
   <input onclick="openbox('Inscription', 1)" value="Inscription" class="button_inscription" type="button">
 </div>
