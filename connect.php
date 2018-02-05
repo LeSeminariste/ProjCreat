@@ -9,4 +9,12 @@ $connexion = mysqli_connect($host,$username,$password)
 
 mysqli_select_db ($connexion, $database)
     or die ("la base de donnée: $database n'existe pas".mysqli_error());
+	
+try{
+	$bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '');
+}
+catch (Exception $e)
+{
+		die('Erreur : ' . $e->getMessage());
+}
 ?>

@@ -1,3 +1,7 @@
+<?php	
+	session_start();
+?>
+
 <?php
 
 include('connect.php');
@@ -26,7 +30,7 @@ if(mysqli_query($connexion, $sql)){
 }
 mysqli_close($connexion);
 
-$url = 'index.php';
+$url = 'espacePerso.php';
 
 //header('Location: https://debarravite.000webhostapp.com/index.php');
 //exit();

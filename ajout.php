@@ -1,3 +1,7 @@
+<?php	
+	session_start();
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -63,15 +67,16 @@
   <body>
   <form action="insert.php" method="post">
     <div id="name">
-		<input name="name" placeholder="Enter your name" type="text"/>
+		<input name="name" placeholder="Enter your name" type="text" style="color: black"/>
 	</div>
 	<div id="locationField">
-		<input id="autocomplete" name="address" placeholder="Enter your address" onFocus="geolocate()" type="text"/>
+		<input id="autocomplete" name="address" placeholder="Enter your address" onFocus="geolocate()" type="text" style="color: black "/>
 	</div>
 	<div id="type">
-		<input name="type" placeholder="Type" type="text"/>
+		<input name="type" placeholder="Type" type="text" style="color: black"/>
 	</div>
-	<p><input type="submit" value="OK"></p>
+	<input type="submit" value="OK" class="button_inscription">
+	<input type="button" class="button_inscription" name="cancel" value="Annuler" onclick="closebox()">
   </form>
 	
 	<script>

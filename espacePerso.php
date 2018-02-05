@@ -122,52 +122,27 @@
     opacity: 0.5;
     filter: alpha(opacity=50);
 }
+#map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
   </style>
   
   <?php 
 		include("xmlCreate.php"); 
 	?>
+	
+	<?php 
+		$name = $_SESSION['name']; 
+		$firstname = $_SESSION['firstname']; 
+	?>
 
-	<?php
-	
-	if(isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['password2']) 
-		&& !empty($_POST['password2']) ){
-			
-			$email=htmlspecialchars($_POST['email']);
-			$pass=htmlspecialchars($_POST['password2']);
-			
-			include('connect.php');
-			$req = $bdd->prepare('SELECT id, name, firstname, password, age, phone FROM users WHERE email= ?');
-			
-			$req->bindValue(1,$email,PDO::PARAM_STR);
-			$check=$req->execute();
-			
-			if($check){
-				if($donnee = $req->fetch()){
-					if($pass === $donnee['password']){
-						$_SESSION['email']=$email;
-						$_SESSION['token']=$donnee['id'];
-						$_SESSION['name']=$donnee['name'];
-						$_SESSION['firstname']=$donnee['firstname'];
-						$_SESSION['age']=$donnee['age'];
-						$_SESSION['phone']=$donnee['phone'];
-						echo "<script>alert('Conenxion reussie.')</script><br>";
-						echo "<meta http-equiv='refresh' content='0; URL=espacePerso.php'>";
-						
-					}
-					else
-						echo "<script>alert('Mauvais identifiants.')</script><br>";
-				}
-				else
-					echo "<script>alert('Mauvais identifiants.')</script><br>";
-			}
-			else
-				echo "<script>alert('erreur de requete')</script><br>";
-				$req->closeCursor();
-		}
-?>
-	
-	
 </head>
 <body>
 
@@ -182,65 +157,104 @@
       </button>
       <a class="navbar-brand" href="#">DébarraVite</a>
     </div>
+	<div>
+	</div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-		<form action="#" method="POST" enctype="multipart/form-data" class="PH" >
-			<input type="email" name="email" placeholder="Email" style="color: black;"/>
-			<input type="password" name="password2" placeholder="Mot de passe" style="color: black;"/>
-			<input type="submit" value="Connexion" class="button_connexion" type="button">
+		<a><?php echo $name; ?></a>
+		<a><?php echo $firstname; ?></a>
+		<form action="logout.php" method="GET" class="PH" >
+			<input type="submit" value="Deconnexion" class="button_connexion" type="button">
+		</form>
+		<form action="ajout.php">
+			<input type="submit" value="Ajout d'une annonce" class="button_inscription" type="submit">
 		</form>
       </ul>
     </div>
   </div>
 </nav>
 
-<div id="shadowing"></div>
-	<div id="box">
-		<span id="boxtitle"></span>	
-		<?php
-			include("register.php");
-		?>
-	</div>
-</div>
+<!-- Body -->
 
-<!-- First Container -->
-<div class="container-fluid bg-1 text-center">
-  <h3 class="margin">Bienvenue sur DébarraVite</h3>
-  <h3>La plateforme collaborative qui met en relation des particuliers afin de faciliter le recyclage d'encombrants. </h3>
-  <iframe width="860" height="480" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
-  <br>
-  <input onclick="openbox('Inscription', 1)" value="Inscription" class="button_inscription" type="button">
-</div>
+<div id="map"></div>
+
+    <script>
+      var customLabel = {
+        restaurant: {
+          label: 'R'
+        },
+        bar: {
+          label: 'B'
+        }
+      };
+
+        function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: new google.maps.LatLng(47.080355, 2.398645),
+          zoom: 12
+        });
+        var infoWindow = new google.maps.InfoWindow;
+
+          // Change this depending on the name of your PHP or XML file
+          downloadUrl('markers.xml', function(data) {
+            var xml = data.responseXML;
+            var markers = xml.documentElement.getElementsByTagName('marker');
+            Array.prototype.forEach.call(markers, function(markerElem) {
+              var name = markerElem.getAttribute('name');
+              var address = markerElem.getAttribute('address');
+              var type = markerElem.getAttribute('type');
+              var point = new google.maps.LatLng(
+                  parseFloat(markerElem.getAttribute('lat')),
+                  parseFloat(markerElem.getAttribute('lng')));
+
+              var infowincontent = document.createElement('div');
+              var strong = document.createElement('strong');
+              strong.textContent = name
+              infowincontent.appendChild(strong);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var text = document.createElement('text');
+              text.textContent = address
+              infowincontent.appendChild(text);
+              var icon = customLabel[type] || {};
+              var marker = new google.maps.Marker({
+                map: map,
+                position: point,
+                label: icon.label
+              });
+              marker.addListener('click', function() {
+                infoWindow.setContent(infowincontent);
+                infoWindow.open(map, marker);
+              });
+            });
+          });
+        }
 
 
 
-<!-- Second Container -->
-<div class="container-fluid bg-2 text-center">
-  <h3 class="margin">What Am I?</h3>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-  <a href="#" class="btn btn-default btn-lg">
-    <span class="glyphicon glyphicon-search"></span> Search
-  </a>
-</div>
+      function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
 
-<!-- Third Container (Grid) -->
-<div class="container-fluid bg-3 text-center">    
-  <h3 class="margin">Where To Find Me?</h3><br>
-  <div class="row">
-    <div class="col-sm-4">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      <img src="birds1.jpg" class="img-responsive margin" style="width:100%" alt="Image">
-    </div>
-    <div class="col-sm-4"> 
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      <img src="birds2.jpg" class="img-responsive margin" style="width:100%" alt="Image">
-    </div>
-    <div class="col-sm-4"> 
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      <img src="birds3.jpg" class="img-responsive margin" style="width:100%" alt="Image">
-    </div>
-  </div>
-</div>
+        request.onreadystatechange = function() {
+          if (request.readyState == 4) {
+            request.onreadystatechange = doNothing;
+            callback(request, request.status);
+          }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+      }
+
+      function doNothing() {}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA5eSkmcNDH8nw7wGcgNSF83GdN2d9PMU&callback=initMap">
+    </script>
+
+
 
 <!-- Footer -->
 <footer class="container-fluid bg-4 text-center">

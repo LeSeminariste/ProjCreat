@@ -11,8 +11,8 @@ CREATE TABLE `users` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
   `name` VARCHAR( 60 ) NOT NULL ,
   `firstname` VARCHAR( 60 ) NOT NULL ,
-  `address` VARCHAR( 80 ) NOT NULL ,
   `phone` INT( 10 ) NOT NULL ,
-  `email` VARCHAR( 60 ) NOT NULL ,
-  `age` INT( 2 )
+  `email` VARCHAR( 100 ) NOT NULL ,
+  `password` VARCHAR( 60 ) NOT NULL ,
+  `age` VARCHAR( 3 ) NOT NULL
 ) ENGINE = MYISAM ;
