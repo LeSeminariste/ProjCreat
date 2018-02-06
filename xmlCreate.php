@@ -56,17 +56,17 @@ function createXMLfile($markerArray){
 
      $marker = $dom->createElement('marker');
 
-     $marker->setAttribute('id', $markerId);
-	 $marker->setAttribute('name', $markerName);
-	 $marker->setAttribute('address', $markerAddress);
-	 $marker->setAttribute('lat', $markerlat);
-	 $marker->setAttribute('lng', $markerlng);
-	 $marker->setAttribute('type', $markertype);
-	 $marker->setAttribute('ownername', $markerownername);
-	 $marker->setAttribute('ownerfirstname', $markerownerfirstname);
-	 $marker->setAttribute('ownerphone', $markerownerphone);
-	 $marker->setAttribute('ownermail', $markerownermail);
-	 $marker->setAttribute('ownerage', $markerownerage);
+     $marker->setAttribute('id', utf8_encode($markerId));
+	 $marker->setAttribute('name', utf8_encode($markerName));
+	 $marker->setAttribute('address', utf8_encode($markerAddress));
+	 $marker->setAttribute('lat', utf8_encode($markerlat));
+	 $marker->setAttribute('lng', utf8_encode($markerlng));
+	 $marker->setAttribute('type', utf8_encode($markertype));
+	 $marker->setAttribute('ownername', utf8_encode($markerownername));
+	 $marker->setAttribute('ownerfirstname', utf8_encode($markerownerfirstname));
+	 $marker->setAttribute('ownerphone', utf8_encode($markerownerphone));
+	 $marker->setAttribute('ownermail', utf8_encode($markerownermail));
+	 $marker->setAttribute('ownerage', utf8_encode($markerownerage));
 	 
      $root->appendChild($marker);
 
